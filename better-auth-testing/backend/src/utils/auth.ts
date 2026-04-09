@@ -19,5 +19,7 @@ export const auth = betterAuth({
     },
   },
 
-  trustedOrigins: ["http://localhost/5173"],
+  trustedOrigins: ["http://localhost:5173"],
+  
+
 });
