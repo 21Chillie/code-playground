@@ -1,9 +1,37 @@
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
+import authClient from "@utils/auth-client";
+import toast from "react-hot-toast";
+import handleGoogleOauth from "~/utils/google-oauth";
 
 function Signup() {
   const [viewPassword, setViewPassword] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleSignUp = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+
+    const { data, error } = await authClient.signUp.email({
+      email,
+      password,
+      name,
+      callbackURL: "/success-signup",
+    });
+
+    if (error) {
+      return toast.error(error.message);
+    }
+
+    setName("");
+    setEmail("");
+    setPassword("");
+
+    toast.success("Signup success");
+    toast.success(`Hello, ${data.user.name}`);
+  };
 
   return (
     <>
@@ -12,11 +40,11 @@ function Signup() {
           <h1 className="text-2xl font-bold">Sign Up</h1>
         </header>
 
-        <form>
+        <form onSubmit={handleSignUp}>
           <div className="mb-4 space-y-2">
             <div>
               <label htmlFor="email" className="text-sm font-medium capitalize">
-                full name
+                full name*
               </label>
               <input
                 className="block w-full rounded-md border border-gray-300 px-2 py-1 text-lg"
@@ -24,6 +52,10 @@ function Signup() {
                 name="name"
                 id="name"
                 placeholder="John Doe"
+                min={1}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
               />
             </div>
 
@@ -37,6 +69,9 @@ function Signup() {
                 name="email"
                 id="email"
                 placeholder="johndoe@mail.com"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -51,6 +86,10 @@ function Signup() {
                   name="password"
                   id="password"
                   placeholder="******"
+                  required
+                  min={8}
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
 
                 <button
@@ -84,6 +123,7 @@ function Signup() {
         <button
           type="button"
           className="flex w-full items-center justify-center gap-2 rounded-md bg-gray-300 py-2 font-semibold text-gray-600 transition-colors hover:bg-gray-400"
+          onClick={() => handleGoogleOauth()}
         >
           <span>
             <FcGoogle />
