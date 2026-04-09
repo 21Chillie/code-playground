@@ -1,9 +1,34 @@
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
+import handleGoogleOauth from "@utils/google-oauth";
+import authClient from "@utils/auth-client";
+import toast from "react-hot-toast";
 
 function Login() {
   const [viewPassword, setViewPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleLogin = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: "/success-login",
+    });
+
+    if (error) {
+      return toast.error(error.message);
+    }
+
+    setEmail("");
+    setPassword("");
+
+    toast.success("Login success");
+    toast.success(`Hello, ${data.user.name}`);
+  };
 
   return (
     <>
@@ -12,7 +37,7 @@ function Login() {
           <h1 className="text-2xl font-bold">Login</h1>
         </header>
 
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="mb-4 space-y-2">
             <div>
               <label htmlFor="email" className="text-sm font-medium capitalize">
@@ -24,6 +49,9 @@ function Login() {
                 name="email"
                 id="email"
                 placeholder="johndoe@mail.com"
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
               />
             </div>
 
@@ -38,6 +66,10 @@ function Login() {
                   name="password"
                   id="password"
                   placeholder="******"
+                  required
+                  min={8}
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
 
                 <button
@@ -71,6 +103,7 @@ function Login() {
         <button
           type="button"
           className="flex w-full items-center justify-center gap-2 rounded-md bg-gray-300 py-2 font-semibold text-gray-600 transition-colors hover:bg-gray-400"
+          onClick={() => handleGoogleOauth()}
         >
           <span>
             <FcGoogle />
