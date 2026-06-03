@@ -1,8 +1,7 @@
-import { useShallow } from "zustand/shallow";
 import { useCountStore } from "../store/useCountStore";
 
 export default function Count() {
-  const count = useCountStore(useShallow((s) => s.count));
+  const count = useCountStore((s) => s.count);
 
   return (
     <section className="mx-auto w-full max-w-md rounded-lg bg-gray-600 p-6">

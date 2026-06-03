@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 export type Theme = "dark" | "light";
 const initialState: { theme: Theme } = {
@@ -12,11 +11,10 @@ type ThemeState = typeof initialState & {
 
 export const useThemeStore = create<ThemeState>()(
   // Persis middleware same as using localStorage
-  persist(
-    (set) => ({
-      ...initialState,
-      setTheme: (theme) => set({ theme }),
-    }),
-    { name: "theme" } // localStorage key
-  )
+
+  (set) => ({
+    ...initialState,
+    setTheme: (theme) => set(() => ({ theme })),
+  })
+  // { name: "theme" } // localStorage key
 );
