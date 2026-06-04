@@ -1,8 +1,7 @@
-import { useThemeStore } from "../store/useThemeStore";
+import { useBoundStore } from "../store/useBoundStore";
 
 export default function Theme() {
-  const theme = useThemeStore(s => s.theme)
-
+  const theme = useBoundStore((s) => s.theme);
   return (
     <section className="rounded-lg bg-gray-600 p-6">
       <h3 className="text-2xl font-bold text-gray-50">

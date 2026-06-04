@@ -1,15 +1,13 @@
 import { useShallow } from "zustand/shallow";
-import { useCountStore } from "../store/useCountStore";
+import { useBoundStore } from "../store/useBoundStore";
 
 export default function CountControl() {
-  const increaseCount = 5;
-
-  const { increment, decrement, reset, incrementBy } = useCountStore(
-    useShallow((state) => ({
-      increment: state.increment,
-      decrement: state.decrement,
-      reset: state.reset,
-      incrementBy: state.incrementBy,
+  const { increment, decrement, reset, incrementBy } = useBoundStore(
+    useShallow((s) => ({
+      increment: s.increment,
+      decrement: s.decrement,
+      reset: s.reset,
+      incrementBy: s.incrementBy,
     }))
   );
 
@@ -39,9 +37,9 @@ export default function CountControl() {
 
         <button
           type="button"
-          onClick={() => incrementBy(increaseCount)}
+          onClick={() => incrementBy(5)}
           className="rounded-md bg-emerald-500 px-6 py-2 font-bold text-gray-800">
-          + {increaseCount}
+          + 5
         </button>
       </div>
     </section>

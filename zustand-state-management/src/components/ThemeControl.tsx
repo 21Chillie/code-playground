@@ -1,8 +1,10 @@
-import { useThemeStore, type Theme } from "../store/useThemeStore";
+import { type Theme } from "../store/themeSlice";
+import { useBoundStore } from "../store/useBoundStore";
 
 export default function ThemeControl() {
-  const themeOption = ["dark", "light"];
-  const setTheme = useThemeStore((s) => s.setTheme);
+  const themeOption = ["dark", "light"] as const;
+  const setTheme = useBoundStore((s) => s.setTheme);
+
   return (
     <section className="rounded-lg bg-gray-600 p-6">
       <select
